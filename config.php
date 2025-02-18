@@ -1,6 +1,6 @@
 <?php
 // Obtener las credenciales de las variables de entorno de Railway
-$host = getenv('mysql.railway.internal');  // mysql.railway.internal
+$host = getenv('shuttle.proxy.rlwy.net');  // mysql.railway.internal
 $usuario = getenv('root');  // root
 $contraseña = getenv('jhTsATHdKIyKOlTCYXouwDxEgsgwrbBo');  // jhTsATHdKIyKOlTCYXouwDxEgsgwrbBo
 $base_de_datos = getenv('railway');  // railway
