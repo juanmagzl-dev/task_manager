@@ -1,15 +1,49 @@
 <?php
-$host = 'dpg-cuqbimlds78s739aoe60-a';
-$usuario = 'task_manager_4t2m_user';
-$contraseña = '5lv05n1QZsYHolEl9lJqI91Ulx129At4';
-$base_de_datos = 'task_manager_4t2m';
+// Obtener las credenciales de las variables de entorno de Railway
+$host = getenv('mysql.railway.internal');  // mysql.railway.internal
+$usuario = getenv('root');  // root
+$contraseña = getenv('jhTsATHdKIyKOlTCYXouwDxEgsgwrbBo');  // jhTsATHdKIyKOlTCYXouwDxEgsgwrbBo
+$base_de_datos = getenv('railway');  // railway
+$puerto = getenv('3306');  // 3306
 
-// Crear conexión
-$conn = pg_connect("host=$host dbname=$base_de_datos user=$usuario password=$contraseña");
+// Conectar a la base de datos
+$conn = new mysqli($host, $usuario, $contraseña, $base_de_datos, $puerto);
 
 // Comprobar la conexión
-if (!$conn) {
-    die("Conexión fallida: " . pg_last_error());
+if ($conn->connect_error) {
+    die("Conexión fallida: " . $conn->connect_error);
 }
-echo "Conectado a la base de datos PostgreSQL correctamente";
+
+// Crear tabla de usuarios (si no existe)
+$sql = "CREATE TABLE IF NOT EXISTS users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255) NOT NULL UNIQUE,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL
+)";
+
+if ($conn->query($sql) === TRUE) {
+    echo "Tabla 'users' creada exitosamente.<br>";
+} else {
+    echo "Error al crear la tabla 'users': " . $conn->error . "<br>";
+}
+
+// Crear tabla de tareas (si no existe)
+$sql = "CREATE TABLE IF NOT EXISTS tasks (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    is_completed BOOLEAN DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+)";
+
+if ($conn->query($sql) === TRUE) {
+    echo "Tabla 'tasks' creada exitosamente.<br>";
+} else {
+    echo "Error al crear la tabla 'tasks': " . $conn->error . "<br>";
+}
+
+$conn->close();
 ?>
