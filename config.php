@@ -1,14 +1,13 @@
 <?php
-$host = "switchyard.proxy.rlwy.net";  // Host de Railway
-$port = "16312";  // Puerto de Railway
-$dbname = "railway";  // Nombre de la base de datos
-$user = "root";  // Usuario de Railway
-$password = "HCpgRfXCDwtalklAkzyoMPCsjSzfMnDK";  // Contraseña de Railway
+$host = 'localhost'; // Cambiar si es necesario
+$dbname = 'task_manager';
+$username = 'prueba_daw'; // Cambiar si usas otro usuario
+$password = 'prueba_daw'; // Cambiar si usas una contraseña
 
 try {
-    $pdo = new PDO("mysql:host=$host;port=$port;dbname=$dbname;charset=utf8", $user, $password);
+    $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
-    die("Error en la conexión: " . $e->getMessage());
+    die("Error al conectar con la base de datos: " . $e->getMessage());
 }
 ?>
